@@ -279,8 +279,9 @@
             <div class="inf-row"><span class="inf-label">Reducido:</span><span id="inf-reduced" class="inf-val" style="color:#28a745;"></span></div>
             <p style="margin-bottom:5px; font-weight:bold; font-size:0.8rem; margin-top:10px;">Hecho Denunciado:</p>
             <div class="inf-text" id="inf-text"></div>
+            
             <div id="inf-note" class="inf-note" style="display:none;">
-                <b>ℹ️ NOTA VMP LIGERO:</b> La denuncia por defecto es para VMP "Pesado". Si es <b>Ligero</b> (Peso &le;25kg y Vel &le;14km/h), usa Opción <b>2.1.5P</b>. <br>Importe: <b>350€</b> (Reducido: <b>175€</b>).
+                <b>ℹ️ NOTA VMP LIGERO:</b> La denuncia por defecto es para VMP "Pesado". Si es <b>Ligero</b> (Peso &le;25kg y Vel &le;14km/h), usa Opción <b>2.1.5P</b>. <br>Importe: <b>350€</b> (Reducido: <b>175€</b>) (Solo si cumple los 2 requisitos).
             </div>
         </div>
         <button class="btn-close-inf" onclick="document.getElementById('infraction-modal').style.display='none'">CERRAR</button>
@@ -312,8 +313,9 @@
         resultsDB: {
             "r_vmp_legal": {
                 title: "VMP (VEHÍCULO MOVILIDAD PERSONAL)", icon: "🛴", style: "admin", matIconType: "vmp",
-                perm: "Ninguno", seg: "OBLIGATORIO (SOA)", mat: "Registro DGT (Chapa/QR)", casco: "Consultar Ordenanza Mun.",
-                text: "✅ <b>VMP APTO</b><br>Régimen administrativo. Edad mínima según Ordenanza Municipal.<br>Requiere Seguro Obligatorio si supera 25kg y 14km/h.<br><b>⚖️ VÍA PENAL:</b><br>• No aplica Art. 379/384 CP salvo conducción temeraria.",
+                perm: "Ninguno", seg: "Requiere seguro obligatorio", mat: "Registro DGT (Chapa/QR)", casco: "Consultar Ordenanza Mun.",
+                // CORRECCION AQUI: ELIMINADO EL TEXTO CONDICIONAL
+                text: "✅ <b>VMP APTO</b><br>Régimen administrativo. Edad mínima según Ordenanza Municipal.<br>Requiere Seguro Obligatorio.<br><b>⚖️ VÍA PENAL:</b><br>• No aplica Art. 379/384 CP salvo conducción temeraria.",
                 soa: { type: "vmp_standard", driver: { opt: "2.1.5N", amount: 800, text: "Circular con el vehículo reseñado (VMP >25kg y >14km/h) careciendo del seguro obligatorio de responsabilidad civil." }, owner: { opt: "2.1.5N (Tit)", amount: 610, text: "Incumplir el propietario la obligación de mantener suscrito el seguro." } }
             },
             "r_epac": { title: "BICICLETA EPAC", icon: "🚲", style: "admin", matIconType: "none", perm: "Ninguno", seg: "No", mat: "No", casco: "Recomendado", text: "✅ <b>BICI ASISTIDA</b><br>Tratamiento de bicicleta.", soa: null },
@@ -342,11 +344,9 @@
             potencia_1000: { q: "¿Hasta qué velocidad auxilia el motor?", opts: [{ t: "Entre 25 y 45 km/h", result: "r_l1e_a" }, { t: "Más de 45 km/h", result: "r_l3e" }] },
             pedales_aux_no: { q: "¿Cuál es la velocidad máxima por construcción?", opts: [{ t: "Hasta 6 km/h", result: "r_juguete" }, { t: "De 6 a 25 km/h", next: "vel_6_25" }, { t: "De 25 a 45 km/h", next: "vel_hasta_45" }, { t: "Más de 45 km/h", next: "vel_mas_45" }] },
             
-            /* RAMA VMP CORREGIDA */
             vel_6_25: { q: "Velocidad 6-25 km/h. ¿Tiene sillín?", opts: [{ t: "Sí", next: "con_sillin_6_25" }, { t: "No", next: "check_baterias" }] },
-            con_sillin_6_25: { q: "¿Es un vehículo autoequilibrado (ej. Segway)?", opts: [{ t: "Sí", next: "check_baterias" }, { t: "No", next: "check_altura_sillin_vmp" }] }, // CAMBIO AQUÍ: Nueva pregunta de 3 opciones
+            con_sillin_6_25: { q: "¿Es un vehículo autoequilibrado (ej. Segway)?", opts: [{ t: "Sí", next: "check_baterias" }, { t: "No", next: "check_altura_sillin_vmp" }] }, 
             
-            // PREGUNTA DE 3 OPCIONES PARA VMP CON SILLÍN (6-25 KM/H)
             check_altura_sillin_vmp: { 
                 q: "¿Cuál es la altura del sillín (Punto R)?", 
                 opts: [
@@ -355,13 +355,11 @@
                     { t: "54 cm o más", next: "ruedas_54_vmp" }
                 ] 
             },
-            // RAMAS DERIVADAS
             ruedas_40_53_vmp: { q: "Altura 40-53cm. ¿Cuántas ruedas tiene?", opts: [{ t: "2 Ruedas", result: "r_prohibido" }, { t: "3 Ruedas", result: "r_l2e" }, { t: "4 Ruedas", result: "r_l6e" }] },
             ruedas_54_vmp: { q: "Altura ≥54cm. ¿Cuántas ruedas tiene?", opts: [{ t: "2 Ruedas", result: "r_l1e_b" }, { t: "3 Ruedas", result: "r_l2e" }, { t: "4 Ruedas", result: "r_l6e" }] },
 
             check_baterias: { q: "¿Qué voltaje indican las características técnicas?", opts: [{ t: "Hasta 100 VCC / 240 VCA", result: "r_vmp_legal" }, { t: "Superior (Alta Tensión)", result: "r_prohibido_voltaje" }] },
 
-            /* RAMA 25-45 KM/H (YA ESTABA CORREGIDA) */
             vel_hasta_45: { q: "Velocidad 25-45 km/h. ¿Tiene sillín?", opts: [{ t: "Sí", next: "check_potencia_45" }, { t: "No", result: "r_prohibido" }] },
             
             check_potencia_45: { q: "Verificación de Potencia / Cilindrada:", opts: [{ t: "≤ 50cc o ≤ 4000 W", next: "check_altura_sillin_baja_potencia" }, { t: "≤ 50cc o 4001 W - 6000 W", next: "ruedas_6000w" }, { t: "> 50cc o > 6000 W", next: "ruedas_heavy" }] },
