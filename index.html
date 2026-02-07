@@ -28,7 +28,6 @@
             overflow: hidden;
         }
 
-        /* --- CABECERA --- */
         header {
             flex: 0 0 auto;
             background-color: var(--white);
@@ -55,7 +54,6 @@
         }
         header h2 { margin: 2px 0 0 0; font-size: 0.65rem; font-weight: 700; color: #555; text-transform: uppercase; }
 
-        /* --- CONTENEDOR --- */
         .container { 
             flex: 1 1 auto; 
             width: 100%; max-width: 600px; margin: 0 auto; padding: 10px;
@@ -87,14 +85,12 @@
         .btn-back { background-color: #90a4ae; color: #37474f; }
         .btn-reset { background-color: var(--accent); color: #000; }
 
-        /* --- FOOTER --- */
         footer {
             flex: 0 0 auto; background: var(--police-blue); color: white; text-align: center;
             padding: 10px; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
             z-index: 10; padding-bottom: max(10px, env(safe-area-inset-bottom));
         }
 
-        /* --- MODAL RESULTADOS --- */
         .modal { 
             display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; 
             background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; 
@@ -122,11 +118,10 @@
         }
 
         .result-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; width: 100%; }
-        .result-logo-img { height: 55px; width: 55px; object-fit: contain; } /* Logos Modal Grandes */
+        .result-logo-img { height: 55px; width: 55px; object-fit: contain; }
         .result-main-icon { font-size: 2.8rem; line-height: 1; }
         .result-main-title { text-align: center; font-size: 1.1rem; margin: 0 0 10px 0; color: #333; font-weight: 800; border-bottom: 2px solid #eee; padding-bottom: 5px; }
 
-        /* TABLA + MATRÍCULA */
         .table-plate-wrapper {
             display: flex; justify-content: space-between; align-items: flex-start; 
             gap: 2px; margin-bottom: 10px; width: 100%;
@@ -148,7 +143,6 @@
         }
         #res-plate-container img { width: auto; max-width: 100%; object-fit: contain; display: block; }
 
-        /* CLASES TAMAÑO MATRÍCULA */
         .plate-ciclomotor { height: 110px; } 
         .plate-moto { height: 100px; }       
         .plate-vmp { height: 155px; } 
@@ -286,7 +280,7 @@
             <p style="margin-bottom:5px; font-weight:bold; font-size:0.8rem; margin-top:10px;">Hecho Denunciado:</p>
             <div class="inf-text" id="inf-text"></div>
             <div id="inf-note" class="inf-note" style="display:none;">
-                <b>ℹ️ NOTA VMP LIGERO:</b> La denuncia por defecto es para VMP "Pesado" (>25kg y >14km/h). Si es <b>Ligero</b> (Peso &le;25kg y Vel &le;14km/h), usa Opción <b>2.1.5P</b>. <br>Importe: <b>350€</b> (Reducido: <b>175€</b>).
+                <b>ℹ️ NOTA VMP LIGERO:</b> La denuncia por defecto es para VMP "Pesado". Si es <b>Ligero</b> (Peso &le;25kg y Vel &le;14km/h), usa Opción <b>2.1.5P</b>. <br>Importe: <b>350€</b> (Reducido: <b>175€</b>).
             </div>
         </div>
         <button class="btn-close-inf" onclick="document.getElementById('infraction-modal').style.display='none'">CERRAR</button>
@@ -324,7 +318,6 @@
             },
             "r_epac": { title: "BICICLETA EPAC", icon: "🚲", style: "admin", matIconType: "none", perm: "Ninguno", seg: "No", mat: "No", casco: "Recomendado", text: "✅ <b>BICI ASISTIDA</b><br>Tratamiento de bicicleta.", soa: null },
             "r_ciclo": { title: "CICLO", icon: "🚲", style: "admin", matIconType: "none", perm: "Ninguno", seg: "No", mat: "No", casco: "Consultar Ordenanza Mun.", text: "✅ <b>BICICLETA</b><br>Tratamiento de bicicleta.", soa: null },
-            // ICONO JUGUETE CAMBIADO A SKATEBOARD
             "r_juguete": { title: "JUGUETE", icon: "🛹", style: "info", matIconType: "none", perm: "No", seg: "No", mat: "No", casco: "No", text: "ℹ️ <b>USO PEATONAL</b><br>Velocidad < 6 km/h.", soa: null },
             
             "r_l1e_a": { title: "L1e-A (CICLO MOTOR)", icon: "🛵", style: "penal", matIconType: "ciclomotor", perm: "AM / B", seg: "Sí", mat: "SÍ (Matrícula DGT)", casco: "Sí", text: "⚠️ <b>VEHÍCULO A MOTOR (L1e-A)</b><br>Requiere Matrícula, Seguro y Casco.<br><b>⚖️ VÍA PENAL:</b><br>• 379.2 CP (Alcohol/Drogas)<br>• 384 CP (Permiso)", soa: { type: "moped", driver: { opt: "2.1.5A", amount: 1000, text: "Circular con ciclomotor sin seguro." }, owner: { opt: "2.1.1A", amount: 650, text: "Titular ciclomotor sin seguro." } } },
@@ -349,19 +342,30 @@
             potencia_1000: { q: "¿Hasta qué velocidad auxilia el motor?", opts: [{ t: "Entre 25 y 45 km/h", result: "r_l1e_a" }, { t: "Más de 45 km/h", result: "r_l3e" }] },
             pedales_aux_no: { q: "¿Cuál es la velocidad máxima por construcción?", opts: [{ t: "Hasta 6 km/h", result: "r_juguete" }, { t: "De 6 a 25 km/h", next: "vel_6_25" }, { t: "De 25 a 45 km/h", next: "vel_hasta_45" }, { t: "Más de 45 km/h", next: "vel_mas_45" }] },
             
-            /* --- LÓGICA CORREGIDA (RAMA VMP / BAJA POTENCIA) --- */
+            /* RAMA VMP CORREGIDA */
             vel_6_25: { q: "Velocidad 6-25 km/h. ¿Tiene sillín?", opts: [{ t: "Sí", next: "con_sillin_6_25" }, { t: "No", next: "check_baterias" }] },
-            con_sillin_6_25: { q: "¿Es un vehículo autoequilibrado (ej. Segway)?", opts: [{ t: "Sí", next: "check_baterias" }, { t: "No", next: "check_altura_sillin" }] },
-            check_baterias: { q: "¿Qué voltaje indican las características técnicas?", opts: [{ t: "Hasta 100 VCC / 240 VCA", result: "r_vmp_legal" }, { t: "Superior (Alta Tensión)", result: "r_prohibido_voltaje" }] },
-            check_altura_sillin: { q: "¿Cuál es la altura del sillín (punto R)?", opts: [{ t: "54 cm o más", next: "check_potencia_45" }, { t: "Menos de 54 cm", next: "check_baterias" }] },
+            con_sillin_6_25: { q: "¿Es un vehículo autoequilibrado (ej. Segway)?", opts: [{ t: "Sí", next: "check_baterias" }, { t: "No", next: "check_altura_sillin_vmp" }] }, // CAMBIO AQUÍ: Nueva pregunta de 3 opciones
+            
+            // PREGUNTA DE 3 OPCIONES PARA VMP CON SILLÍN (6-25 KM/H)
+            check_altura_sillin_vmp: { 
+                q: "¿Cuál es la altura del sillín (Punto R)?", 
+                opts: [
+                    { t: "Menos de 40 cm", result: "r_prohibido" },
+                    { t: "Entre 40 y 53 cm", next: "ruedas_40_53_vmp" },
+                    { t: "54 cm o más", next: "ruedas_54_vmp" }
+                ] 
+            },
+            // RAMAS DERIVADAS
+            ruedas_40_53_vmp: { q: "Altura 40-53cm. ¿Cuántas ruedas tiene?", opts: [{ t: "2 Ruedas", result: "r_prohibido" }, { t: "3 Ruedas", result: "r_l2e" }, { t: "4 Ruedas", result: "r_l6e" }] },
+            ruedas_54_vmp: { q: "Altura ≥54cm. ¿Cuántas ruedas tiene?", opts: [{ t: "2 Ruedas", result: "r_l1e_b" }, { t: "3 Ruedas", result: "r_l2e" }, { t: "4 Ruedas", result: "r_l6e" }] },
 
-            /* --- LÓGICA CORREGIDA (RAMA 25-45 KM/H) --- */
+            check_baterias: { q: "¿Qué voltaje indican las características técnicas?", opts: [{ t: "Hasta 100 VCC / 240 VCA", result: "r_vmp_legal" }, { t: "Superior (Alta Tensión)", result: "r_prohibido_voltaje" }] },
+
+            /* RAMA 25-45 KM/H (YA ESTABA CORREGIDA) */
             vel_hasta_45: { q: "Velocidad 25-45 km/h. ¿Tiene sillín?", opts: [{ t: "Sí", next: "check_potencia_45" }, { t: "No", result: "r_prohibido" }] },
             
-            // Aquí bifurcamos: Alta potencia va directo a ruedas, Baja potencia va a ALTURA SILLÍN
             check_potencia_45: { q: "Verificación de Potencia / Cilindrada:", opts: [{ t: "≤ 50cc o ≤ 4000 W", next: "check_altura_sillin_baja_potencia" }, { t: "≤ 50cc o 4001 W - 6000 W", next: "ruedas_6000w" }, { t: "> 50cc o > 6000 W", next: "ruedas_heavy" }] },
             
-            // NUEVO PASO CRÍTICO: ALTURA SILLÍN EN BAJA POTENCIA
             check_altura_sillin_baja_potencia: { 
                 q: "¿Cuál es la altura del sillín (Punto R)?", 
                 opts: [
@@ -371,11 +375,9 @@
                 ] 
             },
 
-            // RAMAS RESULTANTES DE ALTURA SILLÍN
             ruedas_baja_potencia_40_53: { q: "Altura 40-53cm. ¿Cuántas ruedas tiene?", opts: [{ t: "2 Ruedas", result: "r_prohibido" }, { t: "3 Ruedas", result: "r_l2e" }, { t: "4 Ruedas", result: "r_l6e" }] },
             ruedas_baja_potencia_54: { q: "Altura ≥54cm. ¿Cuántas ruedas tiene?", opts: [{ t: "2 Ruedas", result: "r_l1e_b" }, { t: "3 Ruedas", result: "r_l2e" }, { t: "4 Ruedas", result: "r_l6e" }] },
 
-            // RESTO DE RAMAS (POTENCIA MEDIA/ALTA Y VEL > 45)
             ruedas_6000w: { q: "Potencia Media (4-6kW). ¿Cuántas ruedas tiene?", opts: [{ t: "2 Ruedas", result: "r_l3e" }, { t: "3 Ruedas", next: "check_tipo_3_ruedas" }, { t: "4 Ruedas", result: "r_l6e" }] },
             ruedas_heavy: { q: "Potencia Alta (>6kW). ¿Cuántas ruedas tiene?", opts: [{ t: "2 Ruedas", result: "r_l3e" }, { t: "3 Ruedas", next: "check_tipo_3_ruedas" }, { t: "4 Ruedas", result: "r_l7e" }] },
             
