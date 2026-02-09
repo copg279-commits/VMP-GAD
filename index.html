@@ -30,7 +30,7 @@
             overflow: hidden;
         }
 
-        /* --- HEADER (BASE MÓVIL AUMENTADA +20%) --- */
+        /* --- HEADER --- */
         header {
             flex: 0 0 auto;
             background-color: var(--white);
@@ -39,19 +39,18 @@
             justify-content: space-between;
             align-items: center;
             height: auto;
-            min-height: 75px; /* Aumentado de 60px */
+            min-height: 75px;
             padding: 10px 15px;
             z-index: 10;
             transition: all 0.3s ease;
         }
 
         .header-logo { 
-            height: 62px; /* Aumentado de 50px (+20% aprox) */
+            height: 62px;
             width: auto; object-fit: contain; transition: all 0.3s ease;
         }
         
         .header-titles { display: flex; flex-direction: column; align-items: center; text-align: center; flex-grow: 1; padding: 0 5px; }
-        /* Fuentes ligeramente aumentadas para compensar */
         .header-titles h1 { margin: 0; font-size: 1.0rem; font-weight: 900; color: var(--police-blue); line-height: 1.1; }
         .header-titles h2 { margin: 2px 0 0 0; font-size: 0.65rem; font-weight: 700; color: #666; }
 
@@ -65,7 +64,7 @@
             overflow-y: auto; 
             display: flex; 
             flex-direction: column; 
-            justify-content: center; /* Centrado vertical en móvil */
+            justify-content: center;
         }
 
         .card { 
@@ -122,10 +121,10 @@
 
         .modal-body { padding: 10px; overflow-y: auto; flex-grow: 1; min-height: 0; }
 
-        /* Logos del Resultado (Móvil: Reducidos 20%) */
+        /* Logos del Resultado */
         .result-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .result-logo-img { 
-            height: 72px; width: 72px; /* Reducido de 90px (-20%) */
+            height: 72px; width: 72px; 
             object-fit: contain; transition: all 0.3s ease;
         } 
         .result-main-icon { font-size: 3rem; line-height: 1; }
@@ -155,7 +154,7 @@
 
         /* --- ESTILOS INFRACCIONES --- */
         .infraction-box { 
-            background: white; padding: 0; border-radius: 12px; width: 98%; max-width: 1000px; 
+            background: white; padding: 0; border-radius: 12px; width: 98%; max-width: 800px; 
             border-top: 6px solid #d32f2f; display: flex; flex-direction: column; max-height: 98dvh; overflow: hidden; 
         }
         .infraction-title { color: #d32f2f; font-size: 1rem; font-weight: 800; padding: 8px; text-align: center; background: #fff; border-bottom: 1px solid #eee; }
@@ -196,8 +195,19 @@
 
         .inf-card-body { padding: 8px; background-color: #fff; flex-grow: 1; display: flex; flex-direction: column; }
         
-        .inf-grid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px; font-size: 0.85rem; }
+        /* CAMBIO PRINCIPAL: Grid flexible para evitar cortes */
+        .inf-grid-row { 
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 6px; font-size: 0.85rem; gap: 10px;
+        }
         .inf-item { display: flex; flex-direction: column; }
+        
+        /* Izquierda (Normativa/Importe): Más ancho */
+        .inf-item:first-child { flex: 1 1 65%; }
+        
+        /* Derecha (Opción/Reducido): Alineado derecha, menos ancho */
+        .inf-item:last-child { flex: 1 1 30%; text-align: right; align-items: flex-end; }
+
         .inf-label { font-size: 0.7rem; color: #666; text-transform: uppercase; margin-bottom: 2px; }
         .inf-val { font-weight: 800; color: #333; }
         .inf-val.red { color: #d32f2f; }
@@ -209,19 +219,18 @@
             flex-grow: 1;
         }
         
-        /* MEDIDA CON GRÚA (AJUSTADO PARA NO CORTARSE) */
+        /* MEDIDA CON GRÚA */
         .measure-box { 
             background-color: #ffebee; color: #c62828; font-weight: 800; font-size: 0.8rem; 
-            padding: 6px 10px; /* Menos padding vertical */
+            padding: 6px 10px;
             border-radius: 6px; border: 2px solid #ef9a9a; 
             display: flex; align-items: center; justify-content: space-between;
-            min-height: 50px; /* Altura mínima garantizada */
-            overflow: hidden; /* Por seguridad */
+            min-height: 50px; 
+            overflow: hidden;
         }
         
-        /* SVG GRÚA: Reducido en móvil para no cortarse */
         .tow-icon { 
-            height: 38px; /* Reducido de 45px */
+            height: 38px;
             width: auto; flex-shrink: 0; margin-left: 8px; 
         }
 
@@ -233,9 +242,8 @@
            MEDIA QUERY: PANTALLAS GRANDES (PC/TABLET)
            ========================================= */
         @media (min-width: 768px) {
-            /* Header AÚN MÁS GIGANTE en PC (+20% extra sobre el anterior) */
             header { height: 125px; padding: 15px 40px; }
-            .header-logo { height: 100px; } /* Logos de 100px */
+            .header-logo { height: 100px; } 
             .header-titles h1 { font-size: 1.8rem; }
             .header-titles h2 { font-size: 1rem; }
 
@@ -243,20 +251,18 @@
             .card { padding: 30px; }
             button.option-btn { padding: 20px; font-size: 1.1rem; }
 
-            /* Modal Resultado */
             .modal-content { max-width: 900px; }
-            /* Logos grandes en el dictamen de PC (se mantienen grandes) */
             .result-logo-img { height: 120px; width: 120px; } 
             
-            /* Infracciones: DISEÑO HORIZONTAL */
+            /* CAMBIO PC: Volver a UNA sola columna vertical */
             .inf-content-scroll { 
-                display: grid; 
-                grid-template-columns: 1fr 1fr; 
-                gap: 20px; 
-                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                gap: 15px; 
+                overflow-y: auto;
             }
             
-            .inf-card { height: 100%; margin-bottom: 0; }
+            .inf-card { height: auto; margin-bottom: 0; }
             
             /* Textos y Grúa grandes en PC */
             .inf-val { font-size: 1rem; }
