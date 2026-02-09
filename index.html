@@ -15,6 +15,7 @@
             --bg: #f4f6f9;
             --inf-admin-color: #1565c0;
             --inf-soa-color: #2e7d32;
+            --warning-orange: #ff9800;
         }
 
         * { box-sizing: border-box; }
@@ -121,7 +122,7 @@
 
         .modal-body { padding: 10px; overflow-y: auto; flex-grow: 1; min-height: 0; }
 
-        /* Logos del Resultado */
+        /* Logos del Resultado (Ajustados) */
         .result-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .result-logo-img { 
             height: 72px; width: 72px; 
@@ -130,15 +131,46 @@
         .result-main-icon { font-size: 3rem; line-height: 1; }
         .result-main-title { text-align: center; font-size: 1.2rem; margin: 0 0 10px 0; color: #333; font-weight: 800; border-bottom: 2px solid #eee; padding-bottom: 10px; }
 
-        .table-plate-wrapper { display: flex; justify-content: space-between; align-items: flex-start; gap: 5px; margin-bottom: 5px; }
-        .table-container { flex: 1; min-width: 0; }
+        /* --- SOLUCIÓN TÉCNICA: TABLA E IMAGEN ALINEADAS --- */
+        .table-plate-wrapper { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: stretch; /* ESTO HACE QUE AMBOS LADOS TENGAN LA MISMA ALTURA */
+            gap: 10px; 
+            margin-bottom: 10px; 
+        }
+        
+        .table-container { 
+            flex: 1; /* Ocupa el espacio necesario */
+        }
 
-        .legal-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; border: 1px solid #e0e0e0; }
+        .legal-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 0.85rem; 
+            border: 1px solid #e0e0e0; 
+            /* Importante: no forzar altura aquí, dejar que el contenido mande */
+        }
+        
         .legal-table th { text-align: left; padding: 5px; background-color: #f5f7fa; width: 1%; white-space: nowrap; border-bottom: 1px solid #ddd; color: var(--police-blue); }
         .legal-table td { padding: 5px; border-bottom: 1px solid #eee; color: #444; font-weight: 600; }
 
-        #res-plate-container { flex: 0 0 auto; display: flex; justify-content: center; align-items: center; max-width: 45%; }
-        #res-plate-container img { width: auto; max-width: 100%; height: auto; max-height: 90px; object-fit: contain; }
+        /* CONTENEDOR DE IMAGEN "INTELIGENTE" */
+        #res-plate-container { 
+            flex: 0 0 45%; /* Ancho fijo */
+            position: relative; /* Necesario para que la imagen de dentro se posicione respecto a esto */
+            /* No tiene altura fija, la hereda de la tabla gracias a align-items: stretch */
+        }
+        
+        #res-plate-container img { 
+            position: absolute; /* Saca la imagen del flujo normal */
+            top: 0; left: 0; bottom: 0; right: 0; /* Pégala a los 4 bordes */
+            margin: auto; /* Centrada */
+            max-width: 100%; 
+            max-height: 100%; /* CLAVE: Nunca más alta que el contenedor (la tabla) */
+            object-fit: contain; /* Ajuste perfecto sin deformar */
+        }
+        /* ------------------------------------------------ */
 
         .legal-box { padding: 10px; border-radius: 6px; font-size: 0.85rem; line-height: 1.4; text-align: left; margin-top: 5px; }
         .box-penal { background-color: #ffebee; border-left: 4px solid var(--danger); color: #c62828; }
@@ -151,6 +183,27 @@
         .nav-buttons-row { display: flex; gap: 8px; width: 100%; }
         .btn-modal-back { flex: 1; padding: 10px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 6px; font-weight: bold; cursor: pointer; color: #555; font-size: 0.9rem; }
         .btn-modal-new { flex: 1; padding: 10px; background: var(--police-blue); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
+
+        /* --- ESTILOS AYUDA VMP ANTIGUOS --- */
+        .help-toggle-btn {
+            background-color: var(--warning-orange); color: white; width: 100%; padding: 12px;
+            border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .help-toggle-content {
+            display: none; background: #fff3e0; padding: 10px; border-radius: 8px; margin-top: 5px;
+            border: 1px solid #ffe0b2; font-size: 0.85rem; color: #333; animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        
+        .legacy-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; font-size: 0.8rem; }
+        .legacy-table th { background: #ffcc80; padding: 5px; border: 1px solid #eda25e; color: #333; }
+        .legacy-table td { padding: 5px; border: 1px solid #eda25e; text-align: center; font-weight: bold; }
+        
+        .legacy-advice {
+            background: white; padding: 10px; border-left: 4px solid #d32f2f; margin-top: 10px; 
+            font-style: italic; color: #444; border-radius: 0 4px 4px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
 
         /* --- ESTILOS INFRACCIONES --- */
         .infraction-box { 
@@ -195,7 +248,7 @@
 
         .inf-card-body { padding: 8px; background-color: #fff; flex-grow: 1; display: flex; flex-direction: column; }
         
-        /* CAMBIO PRINCIPAL: Grid flexible para evitar cortes */
+        /* Grid flexible para evitar cortes */
         .inf-grid-row { 
             display: flex; justify-content: space-between; align-items: flex-start;
             margin-bottom: 6px; font-size: 0.85rem; gap: 10px;
@@ -252,9 +305,10 @@
             button.option-btn { padding: 20px; font-size: 1.1rem; }
 
             .modal-content { max-width: 900px; }
+            /* Logos grandes en el dictamen de PC */
             .result-logo-img { height: 120px; width: 120px; } 
             
-            /* CAMBIO PC: Volver a UNA sola columna vertical */
+            /* Infracciones: EN PC TAMBIÉN UNA DEBAJO DE OTRA (SOLICITADO) */
             .inf-content-scroll { 
                 display: flex;
                 flex-direction: column;
@@ -346,6 +400,48 @@
                 <li><strong>Dictamen 2/2021:</strong> Se excluye vía penal en L1e-A y VMP (salvo lesiones).</li>
                 <li><strong>>1000W:</strong> Si supera 45km/h es Motocicleta (L3e) Penal.</li>
             </ul>
+
+            <button class="help-toggle-btn" onclick="app.toggleHelpSection('legacy-vmp')">
+                <span>📅 VMP SIN CHAPA (ANTES 2024)</span>
+                <span>▼</span>
+            </button>
+            <div id="help-legacy-vmp" class="help-toggle-content">
+                <h4 style="margin:5px 0 10px 0; color:#d32f2f; text-align:center; border-bottom:1px solid #e0e0e0; padding-bottom:5px;">CALENDARIO "MUERTE" VMP ANTIGUO</h4>
+                
+                <p><strong>1. "Antiguos" (Comercializados ANTES 22/01/2024):</strong><br>
+                Solo tienen pegatina del fabricante (Sin chapa metálica DGT).<br>
+                • <strong>2026:</strong> LEGALES.<br>
+                • <strong>22/01/2027:</strong> PROHIBIDOS (Pasan a residuos/juguetes).</p>
+                
+                <p><strong>2. "Certificados" (DESPUÉS 22/01/2024):</strong><br>
+                Llevan Placa Metálica con QR. Legales indefinidamente.</p>
+                
+                <p><strong>PROBLEMA REGISTRO 2026:</strong><br>
+                La DGT podría no permitir inscribir VMP antiguos o dar permisos temporales hasta enero 2027.</p>
+
+                <div class="legacy-advice">
+                    <strong>Consejo al ciudadano:</strong> "Oiga, si su patinete es de los viejos y no tiene la chapa plateada de la DGT, sepa que en enero de 2027 ya no valdrá. Téngalo en cuenta antes de gastar dinero en seguros o trámites largos, porque le queda un año de vida útil."
+                </div>
+
+                <table class="legacy-table">
+                    <tr>
+                        <th style="text-align:left;">¿Qué ves?</th>
+                        <th>HOY (2026)</th>
+                        <th>Post-2027</th>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;">Solo Pegatina (Xiaomi/Cecotec...)</td>
+                        <td style="color:#2e7d32;">LEGAL<br><span style="font-size:0.7rem; font-weight:normal;">(Moratoria)</span></td>
+                        <td style="color:#d32f2f;">ILEGAL<br><span style="font-size:0.7rem; font-weight:normal;">(500€)</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;">Placa Metálica ("Certificado VMP" + QR)</td>
+                        <td style="color:#2e7d32;">LEGAL</td>
+                        <td style="color:#2e7d32;">LEGAL</td>
+                    </tr>
+                </table>
+            </div>
+
             <div class="disclaimer-note">
                 No válido para uso oficial. Pendiente de supervisión por <strong>Pepito</strong>.
             </div>
@@ -462,6 +558,7 @@
     const app = {
         currentInfractionData: null, 
         currentMode: 'driver',
+        isAdminSwitched: false, 
         
         resultsDB: {
             "r_vmp_vpl": {
@@ -506,7 +603,7 @@
                 text: "⚠️ <b>CICLO DE MOTOR (L1e-A)</b><br>Requiere Matrícula, Seguro y Casco.<br><br>ℹ️ <b>CRITERIO FISCALÍA (Dictamen 2/2021):</b> Se excluye de la Vía Penal (Arts. 379/384 CP). Procede denuncia administrativa.", 
                 infractions: {
                     admin: { 
-                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación) (Vehículo NO registrado).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación) (Vehículo NO registrado).", action: "INMOVILIZACIÓN / DEPÓSITO" },
                         alt: { norm: "Art. 10.2 LSV", opt: "5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula (Vehículo SÍ registrado pero sin placa física).", action: "INMOVILIZACIÓN / DEPÓSITO" }
                     },
                     soa: { type: "moped", driver: { opt: "2.1.5A", amount: 1000, text: "Circular con ciclomotor sin seguro." }, owner: { opt: "2.1.1A", amount: 650, text: "Titular ciclomotor sin seguro." } } 
@@ -517,7 +614,7 @@
                 text: "⚠️ <b>CICLOMOTOR (L1e-B)</b><br>Vehículo matriculable.<br><b>⚖️ VÍA PENAL:</b><br>• 379.2 CP (Alcohol/Drogas)<br>• 384 CP (Permiso)", 
                 infractions: {
                     admin: { 
-                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación) (Vehículo NO registrado).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación) (Vehículo NO registrado).", action: "INMOVILIZACIÓN / DEPÓSITO" },
                         alt: { norm: "Art. 10.2 LSV", opt: "5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula (Vehículo SÍ registrado pero sin placa física).", action: "INMOVILIZACIÓN / DEPÓSITO" }
                     },
                     soa: { type: "moped", driver: { opt: "2.1.5A", amount: 1000, text: "Circular con ciclomotor sin seguro." }, owner: { opt: "2.1.1A", amount: 650, text: "Titular ciclomotor sin seguro." } } 
@@ -528,7 +625,7 @@
                 text: "⚠️ <b>CICLOMOTOR 3 RUEDAS</b><br>Vehículo matriculable.<br><b>⚖️ VÍA PENAL:</b><br>• 379.2 CP (Alcohol/Drogas)<br>• 384 CP (Permiso)", 
                 infractions: {
                     admin: { 
-                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
                         alt: { norm: "Art. 10.2 LSV", opt: "5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula.", action: "INMOVILIZACIÓN / DEPÓSITO" }
                     },
                     soa: { type: "moped", driver: { opt: "2.1.5A", amount: 1000, text: "Circular con ciclomotor sin seguro." }, owner: { opt: "2.1.1A", amount: 650, text: "Titular ciclomotor sin seguro." } } 
@@ -539,7 +636,7 @@
                 text: "⚠️ <b>CUADRICICLO LIGERO</b><br>Vehículo matriculable.<br><b>⚖️ VÍA PENAL:</b><br>• 379.2 CP (Alcohol/Drogas)<br>• 384 CP (Permiso)", 
                 infractions: {
                     admin: { 
-                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
                         alt: { norm: "Art. 10.2 LSV", opt: "5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula.", action: "INMOVILIZACIÓN / DEPÓSITO" }
                     },
                     soa: { type: "moped", driver: { opt: "2.1.5A", amount: 1000, text: "Circular con ciclomotor sin seguro." }, owner: { opt: "2.1.1A", amount: 650, text: "Titular ciclomotor sin seguro." } } 
@@ -550,7 +647,7 @@
                 text: "⚠️ <b>MOTOCICLETA (L3e)</b><br>Vehículo matriculable.<br><b>⚖️ VÍA PENAL:</b><br>• 379.2 CP (Alcohol/Drogas)<br>• 384 CP (Permiso)", 
                 infractions: {
                     admin: { 
-                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
                         alt: { norm: "Art. 10.2 LSV", opt: "5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula.", action: "INMOVILIZACIÓN / DEPÓSITO" }
                     },
                     soa: { type: "moto", driver: { opt: "2.1.5B", amount: 1250, text: "Circular con motocicleta sin seguro." }, owner: { opt: "2.1.1B", amount: 850, text: "Titular motocicleta sin seguro." } } 
@@ -561,7 +658,7 @@
                 text: "⚠️ <b>MOTO CON SIDECAR</b><br>Vehículo matriculable.<br><b>⚖️ VÍA PENAL:</b><br>• 379.2 CP (Alcohol/Drogas)<br>• 384 CP (Permiso)", 
                 infractions: {
                     admin: { 
-                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
                         alt: { norm: "Art. 10.2 LSV", opt: "5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula.", action: "INMOVILIZACIÓN / DEPÓSITO" }
                     },
                     soa: { type: "moto", driver: { opt: "2.1.5B", amount: 1250, text: "Circular con motocicleta sin seguro." }, owner: { opt: "2.1.1B", amount: 850, text: "Titular motocicleta sin seguro." } } 
@@ -572,7 +669,7 @@
                 text: "⚠️ <b>TRICICLO SIMÉTRICO</b><br>Vehículo matriculable.<br><b>⚖️ VÍA PENAL:</b><br>• 379.2 CP (Alcohol/Drogas)<br>• 384 CP (Permiso)", 
                 infractions: {
                     admin: { 
-                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
                         alt: { norm: "Art. 10.2 LSV", opt: "5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula.", action: "INMOVILIZACIÓN / DEPÓSITO" }
                     },
                     soa: { type: "moto", driver: { opt: "2.1.5B", amount: 1250, text: "Circular con vehículo sin seguro." }, owner: { opt: "2.1.1B", amount: 850, text: "Titular vehículo sin seguro." } } 
@@ -583,7 +680,7 @@
                 text: "⚠️ <b>CUADRICICLO PESADO</b><br>Vehículo matriculable.<br><b>⚖️ VÍA PENAL:</b><br>• 379.2 CP (Alcohol/Drogas)<br>• 384 CP (Permiso)", 
                 infractions: {
                     admin: { 
-                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                        default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa (Permiso Circulación).", action: "INMOVILIZACIÓN / DEPÓSITO" },
                         alt: { norm: "Art. 10.2 LSV", opt: "5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula.", action: "INMOVILIZACIÓN / DEPÓSITO" }
                     },
                     soa: { type: "turismo", driver: { opt: "2.1.5C", amount: 1500, text: "Circular con vehículo sin seguro." }, owner: { opt: "2.1.1C", amount: 1000, text: "Titular vehículo sin seguro." } } 
@@ -601,7 +698,7 @@
                 title: "ILEGAL (VOLTAJE)", icon: "🔌", style: "danger", matIconType: "none", perm: "-", seg: "-", mat: "-", casco: "-", 
                 text: "🚫 <b>VOLTAJE PELIGROSO</b><br>Excede 100VCC / 240VAC.", 
                 infractions: {
-                    admin: { default: { norm: "Art. 1.1 RGV", opt: "1.1.5A", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa para circular.", action: "INMOVILIZACIÓN / DEPÓSITO" } },
+                    admin: { default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa para circular.", action: "INMOVILIZACIÓN / DEPÓSITO" } },
                     soa: null 
                 }
             }
@@ -846,9 +943,19 @@
             document.getElementById('inf-soa-text').innerText = data.text;
         },
 
+        toggleHelpSection: function(id) {
+            const el = document.getElementById('help-' + id);
+            if (el.style.display === 'block') {
+                el.style.display = 'none';
+            } else {
+                el.style.display = 'block';
+            }
+        },
+
         closeModal: function() { this.dom.modal.style.display = 'none'; },
         resetApp: function() { this.closeModal(); this.historyStack = []; this.renderStep('start'); }
     };
 </script>
 </body>
 </html>
+}
