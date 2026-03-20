@@ -27,7 +27,14 @@ const app = {
             text: "✅ <b>VPL (Vehículo Personal Ligero)</b><br>Peso < 25kg ó (Peso > 25kg y Vel < 14km/h).<br>No se considera vehículo a motor, pero requiere Seguro.<br><b>Sanción SOA:</b> Solo por circular (350€).<br><br>ℹ️ <b>NOTA PENAL:</b> No aplica Art. 384 CP salvo que el vehículo esté manipulado/trucado para superar los 25km/h o 1000W.",
             infractions: {
                 admin: { 
-                    default: { norm: "Art. 76.o LSV (Ref. 22bis RGV)", opt: "Genérica", amount: "200 €", reduced: "100 €", text: "Circular con el vehículo reseñado incumpliendo las normas sobre el certificado para la circulación y su identificación. (Aplicable según Instr. 16/V-124 DGT).", action: "DEPÓSITO (ORD. MUN.)" },
+                    default: { 
+                        norm: "Art. 22 bis RGV (Aptado A)", 
+                        opt: "Genérica", 
+                        amount: "200 €", 
+                        reduced: "100 €", 
+                        text: "Circular con un Vehículo de Movilidad Personal (VMP) careciendo del certificado de circulación que garantice el cumplimiento de los requisitos técnicos exigibles por la normativa nacional e internacional. <span style='color: red;'>(Cuantía no fijada oficialmente por DGT por el momento)</span> Se aconseja dejar en blanco y si existiera obligación de pago fijar la cuantía como falta Grave 200 euros Reducido 100.", 
+                        action: "DEPÓSITO (ORD. MUN.)" 
+                    },
                     alt: { norm: "Art. 10.2 LSV (RDL 6/2015)", opt: "5A", amount: "200 €", reduced: "100 €", text: "Circular con el vehículo reseñado careciendo de las placas de matrícula (o identificación VMP) estando inscrito.", action: "DEPÓSITO (ORD. MUN.)" }
                 },
                 soa: { type: "vpl", driver: { opt: "2.1.5P", amount: 350, text: "Circular con el vehículo reseñado careciendo del seguro obligatorio de responsabilidad civil exigido para su circulación." }, owner: null }
@@ -37,12 +44,19 @@ const app = {
             title: "VMP (>25KG Y >14KM/H)", icon: "🛴", style: "admin", matIconType: "vmp",
             perm: "Ninguno", seg: "OBLIGATORIO (MOTOR)", mat: "Registro DGT (Chapa/QR)", casco: "Consultar Ordenanza Mun.",
             text: "⚠️ <b>VMP ASIMILADO A MOTOR</b><br>Peso > 25kg Y Velocidad > 14km/h.<br>A efectos de Seguro se trata como Vehículo a Motor.<br><b>Sanción SOA:</b> 800€ (Circular) / 610€ (Titular).<br><br>ℹ️ <b>NOTA PENAL (Dictamen 2/2021):</b> No aplica Art. 384 CP ni 379 CP (Alcoholemia Penal) salvo que cause lesiones/homicidio imprudente.",
-            infractions: {
+           infractions: {
                 admin: { 
-                    default: { norm: "Art. 76.o LSV (Ref. 22bis RGV)", opt: "Genérica", amount: "200 €", reduced: "100 €", text: "Circular con el vehículo reseñado incumpliendo las normas sobre el certificado para la circulación y su identificación. (Aplicable según Instr. 16/V-124 DGT).", action: "DEPÓSITO (ORD. MUN.)" },
+                    default: { 
+                        norm: "Art. 22 bis RGV (Aptado A)", 
+                        opt: "Genérica", 
+                        amount: "200 €", 
+                        reduced: "100 €", 
+                        text: "Circular con un Vehículo de Movilidad Personal (VMP) careciendo del certificado de circulación que garantice el cumplimiento de los requisitos técnicos exigibles por la normativa nacional e internacional. <span style='color: red;'>(Cuantía no fijada oficialmente por DGT por el momento)</span> Se aconseja dejar en blanco y si existiera obligación de pago fijar la cuantía como falta Grave 200 euros Reducido 100.", 
+                        action: "DEPÓSITO (ORD. MUN.)" 
+                    },
                     alt: { norm: "Art. 10.2 LSV (RDL 6/2015)", opt: "5A", amount: "200 €", reduced: "100 €", text: "Circular con el vehículo reseñado careciendo de las placas de matrícula (o identificación VMP) estando inscrito.", action: "DEPÓSITO (ORD. MUN.)" }
                 },
-                soa: { type: "vmp_motor", driver: { opt: "2.1.5N", amount: 800, text: "Circular con el vehículo reseñado careciendo del seguro obligatorio de responsabilidad civil exigido para su circulación." }, owner: { opt: "2.1.5O", amount: 610, text: "Incumplir el titular del vehículo reseñado la obligación de suscribir y mantener en vigor un contrato de seguro que cubra la responsabilidad civil derivada de su circulación." } }
+                soa: { type: "vpl", driver: { opt: "2.1.5P", amount: 350, text: "Circular con el vehículo reseñado careciendo del seguro obligatorio de responsabilidad civil exigido para su circulación." }, owner: null }
             }
         },
         "r_epac": { title: "BICICLETA EPAC", icon: "🚲", style: "admin", matIconType: "none", perm: "Ninguno", seg: "No", mat: "No", casco: "Recomendado", text: "✅ <b>BICI ASISTIDA</b><br>Tratamiento de bicicleta.", infractions: null },
@@ -397,7 +411,7 @@ motor_si: {
         document.getElementById('inf-admin-opt').innerText = data.opt;
         document.getElementById('inf-admin-amount').innerText = data.amount;
         document.getElementById('inf-admin-reduced').innerText = data.reduced || '-';
-        document.getElementById('inf-admin-text').innerText = data.text;
+        document.getElementById('inf-admin-text').innerHTML = data.text; // ¡Cambiado a innerHTML!
         document.getElementById('inf-admin-action').innerText = "MEDIDA: " + data.action.replace(' 🏗️', '');
     },
 
