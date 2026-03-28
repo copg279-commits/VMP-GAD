@@ -36,6 +36,12 @@
         .btn-admin-nav { flex: 1; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; background: #eee; color: #333; transition: 0.3s; }
         .btn-admin-nav.active { background: #0a2e52; color: white; }
     </style>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a2e52">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GAD VMP">
+    <link rel="apple-touch-icon" href="logo192.png">
 </head>
 <body>
 
@@ -60,11 +66,13 @@
                     <span>ℹ️</span> AYUDA E INSTRUCCIONES
                 </button>
                <div id="login-help-box" class="login-help">
-                    1. Pulsa en <b>Acceso al Sistema</b> e identifícate con tu cuenta <b>Gmail</b>.<br>
-                    2. Si es tu primera vez, pulsa en <b>Solicitar Acceso</b> y rellena el formulario con tu TIP y correo Gmail.
+                    Pulsa en <b>Acceder / Solicitar Acceso</b>.<br>
+                    El sistema detectará automáticamente si ya tienes permiso o si necesitas rellenar la solicitud.
                 </div>
-                <button id="btn-login" class="google-btn" type="button"><span>🔑</span> ACCESO AL SISTEMA</button>
-                <button type="button" class="req-btn" onmousedown="var m = document.getElementById('request-modal'); if(m){ m.style.display='flex'; m.style.zIndex='999999'; }"><span>🛡️</span> SOLICITAR ACCESO AL SISTEMA</button>
+                
+                <button id="btn-login" class="google-btn" type="button">
+                    <span>🔑</span> ACCEDER / SOLICITAR ACCESO
+                </button>
             </div>
             <div id="login-status" class="status-txt"></div>
         </div>
@@ -282,31 +290,39 @@
             else { ui.loading.style.display = 'none'; ui.actions.style.display = 'block'; }
         });
 
-        ui.btnLogin.addEventListener('click', () => {
+        ui.btnLogin.addEventListener('click', async () => {
             ui.actions.style.display = 'none'; ui.loading.style.display = 'block';
             ui.status.innerText = "Conectando al Sistema...";
-            signInWithPopup(auth, provider).catch(e => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (e) {
                 ui.loading.style.display = 'none'; ui.actions.style.display = 'block';
                 if (e.code === 'auth/popup-closed-by-user') { ui.status.innerText = "Operación cancelada."; } 
                 else { ui.status.innerText = "Error: " + e.message; }
-            });
+            }
         });
 
         async function checkUser(user) {
-            ui.actions.style.display = 'none'; ui.loading.style.display = 'block'; ui.status.innerText = ""; 
+            ui.actions.style.display = 'none'; ui.loading.style.display = 'block'; ui.status.innerText = "Verificando permisos..."; 
             try {
                 const snap = await getDoc(doc(db, "users_PLAlicante", user.email));
                 if (snap.exists()) {
-                    if (snap.data().autorizado === true) { enterApp(user.email); } 
-                    else {
+                    const data = snap.data();
+                    if (data.autorizado === true) { 
+                        enterApp(user.email); 
+                    } else {
                         ui.loading.style.display = 'none';
                         ui.status.innerHTML = `<span style="color:#ff9800">⚠️ Solicitud pendiente de aprobación.</span><br>Usuario: <b>${user.email}</b>`;
+                        ui.status.innerHTML += `<br><button onclick="window.repairAccess('${user.email}', '${data.tip || ''}')" style="margin-top:10px; background:#ff9800; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; width:100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">🔧 SOLICITAR REPARAR ACCESO</button>`;
                         showLogout();
                     }
                 } else {
-                    ui.loading.style.display = 'none'; ui.actions.style.display = 'block'; 
-                    ui.status.innerHTML = `Usuario no registrado: <b>${user.email}</b><br>Pulsa en SOLICITAR ACCESO.`;
+                    ui.loading.style.display = 'none';
                     document.getElementById('req-email').value = user.email; 
+                    ui.status.innerHTML = `Usuario no registrado: <b>${user.email}</b><br>Rellena el formulario de acceso.`;
+                    
+                    const m = document.getElementById('request-modal');
+                    if(m){ m.style.display='flex'; m.style.zIndex='999999'; }
                     showLogout();
                 }
             } catch (e) { console.error(e); ui.loading.style.display = 'none'; ui.status.innerText = "Error de conexión con la BD."; showLogout(); }
@@ -322,7 +338,7 @@
             }
 
             document.getElementById('request-modal').style.display = 'none';
-            ui.actions.style.display = 'none'; ui.loading.style.display = 'block';
+            ui.loading.style.display = 'block';
             ui.status.innerText = "Enviando solicitud...";
 
             try {
@@ -338,10 +354,7 @@
             } catch (e) { 
                 console.error(e); 
                 ui.loading.style.display = 'none'; 
-                ui.status.innerHTML = `
-                    <span style="color:#ff9800; font-size:0.9rem;">⚠️ Ya dispones de cuenta pero no tienes acceso.</span><br>
-                    <button onclick="window.repairAccess('${email}', '${tip}')" style="margin-top:10px; background:#ff9800; color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">🔧 SOLICITAR REPARAR ACCESO</button>
-                `; 
+                ui.status.innerText = "Error al enviar solicitud.";
             }
         };
 
@@ -548,7 +561,7 @@
             }
         };
 
-   window.approveUser = async (email) => {
+        window.approveUser = async (email) => {
             const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwh71TCV4pZs--_z3UDlyPPYInkE-ECBT8oFTDULOpVhhvBHJsjuq-QXzbwdCOMveBT/exec"; // Asegúrate de que termina en /exec
 
             try {
@@ -584,6 +597,31 @@
             }
         }
     </script>
+    <button id="btn-install-pwa" style="display: none; position: fixed; bottom: 85px; right: 20px; z-index: 99999; background: #ff9800; color: white; padding: 12px 20px; border-radius: 50px; font-weight: bold; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer;">
+        📲 INSTALAR APP
+    </button>
     <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
+        let deferredPrompt;
+        const installBtn = document.getElementById('btn-install-pwa');
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block';
+        });
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
