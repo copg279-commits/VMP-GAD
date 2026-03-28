@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     
     <style>
-        /* --- ESTILOS PANTALLA DE LOGIN DARK Y BOTONES PREMIUM --- */
+        /* --- ESTILOS PANTALLA DE LOGIN DARK Y BOTONES PREMIUM (T4C STYLE) --- */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #041222 0%, #0a2e52 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
         .login-card { background: rgba(15, 23, 42, 0.95); padding: 25px 15px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 100%; max-width: 420px; text-align: center; color: #ffffff; box-sizing: border-box; }
         .login-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; gap: 10px; }
@@ -35,13 +35,24 @@
         .admin-nav-btns { display: flex; gap: 10px; margin-bottom: 15px; }
         .btn-admin-nav { flex: 1; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; background: #eee; color: #333; transition: 0.3s; }
         .btn-admin-nav.active { background: #0a2e52; color: white; }
+
+        /* --- ESTILOS BANNER PWA PREMIUM (T4C STYLE) --- */
+        .pwa-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.98); color: white; padding: 15px; box-sizing: border-box; border-top: 2px solid #0d47a1; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); z-index: 999999; display: flex; flex-direction: column; gap: 12px; animation: slideInUp 0.5s ease-out; }
+        .pwa-banner-content { display: flex; align-items: center; gap: 12px; }
+        .pwa-banner-icon { width: 48px; height: 48px; border-radius: 10px; object-fit: contain; }
+        .pwa-banner-text strong { font-size: 1rem; display: block; margin-bottom: 2px; }
+        .pwa-banner-text p { font-size: 0.8rem; margin: 0; color: #aaa; }
+        .pwa-banner-actions { display: flex; gap: 10px; }
+        .pwa-btn-close { flex: 1; background: #333; color: #ccc; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .pwa-btn-install { flex: 2; background: linear-gradient(145deg, #0d47a1, #1565c0); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        @keyframes slideInUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0a2e52">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="GAD VMP">
-    <link rel="apple-touch-icon" href="logo192.png">
+    <link rel="apple-touch-icon" href="POLICIA.png">
 </head>
 <body>
 
@@ -251,6 +262,20 @@
                 <button id="btn-reset-user" style="width:100%; padding: 10px; background:#fbe9e7; color:#d32f2f; border:1px solid #ffccbc; border-radius:8px; font-weight:bold; cursor:pointer; margin-bottom:10px;">RESET VISITAS USUARIO</button>
                 <button style="width:100%; padding: 10px; background:#ccc; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="document.getElementById('logs-modal').style.display='none'">VOLVER</button>
             </div>
+        </div>
+    </div>
+
+    <div id="pwa-install-banner" class="pwa-banner" style="display:none;">
+        <div class="pwa-banner-content">
+            <img src="POLICIA.png" alt="App Logo" class="pwa-banner-icon">
+            <div class="pwa-banner-text">
+                <strong>INSTALAR APP "GAD VMP"</strong>
+                <p>Accede rápido y sin internet.</p>
+            </div>
+        </div>
+        <div class="pwa-banner-actions">
+            <button id="btn-pwa-close" class="pwa-btn-close">Ahora no</button>
+            <button id="btn-pwa-install" class="pwa-btn-install">INSTALAR</button>
         </div>
     </div>
 
@@ -597,31 +622,59 @@
             }
         }
     </script>
-    <button id="btn-install-pwa" style="display: none; position: fixed; bottom: 85px; right: 20px; z-index: 99999; background: #ff9800; color: white; padding: 12px 20px; border-radius: 50px; font-weight: bold; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer;">
-        📲 INSTALAR APP
-    </button>
     <script src="app.js"></script>
+    
     <script>
+        // 1. Registro del Service Worker (Fundamental para PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js');
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('SW Alicante registrado', reg))
+                .catch(err => console.error('Error SW Alicante', err));
             });
         }
+
+        // 2. Lógica del Banner de Instalación Premium
         let deferredPrompt;
-        const installBtn = document.getElementById('btn-install-pwa');
+        const pwaBanner = document.getElementById('pwa-install-banner');
+        const btnInstall = document.getElementById('btn-pwa-install');
+        const btnClose = document.getElementById('btn-pwa-close');
+
+        // Escuchar el evento que indica que la App es instalable
         window.addEventListener('beforeinstallprompt', (e) => {
+            // Evitar que Chrome muestre su prompt automático feo
             e.preventDefault();
+            // Guardar el evento para usarlo cuando pulsen "INSTALAR"
             deferredPrompt = e;
-            installBtn.style.display = 'block';
+            // Mostrar NUESTRO banner premium deslizante
+            if(pwaBanner) pwaBanner.style.display = 'flex';
         });
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-                installBtn.style.display = 'none';
-            }
-        });
+
+        // Acción del botón INSTALAR del banner
+        if(btnInstall){
+            btnInstall.addEventListener('click', async () => {
+                // Ocultar el banner inmediatamente
+                if(pwaBanner) pwaBanner.style.display = 'none';
+                // Mostrar el prompt nativo de instalación
+                if(deferredPrompt){
+                    deferredPrompt.prompt();
+                    // Esperar la respuesta del usuario
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`User response to install prompt: ${outcome}`);
+                    // Ya no necesitamos el evento guardado
+                    deferredPrompt = null;
+                }
+            });
+        }
+
+        // Acción del botón CERRAR (Ahora no) del banner
+        if(btnClose){
+            btnClose.addEventListener('click', () => {
+                // Simplemente ocultar el banner
+                if(pwaBanner) pwaBanner.style.display = 'none';
+                // Opcional: Podrías guardar un flag en localStorage para no volver a mostrarlo en 24h.
+            });
+        }
     </script>
 </body>
 </html>
