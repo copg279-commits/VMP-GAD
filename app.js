@@ -24,7 +24,7 @@ const app = {
         "r_vmp_vpl": {
             title: "VMP - VPL (LIGERO)", icon: "🛴", style: "admin", matIconType: "vmp",
             perm: "Ninguno", seg: "OBLIGATORIO (VPL)", mat: "Etiqueta DGT (M-0000-BBB)", casco: "Consultar Ordenanza Mun.",
-            text: "✅ <b>VPL (Vehículo Personal Ligero)</b><br>Peso < 25kg ó (Peso > 25kg y Vel < 14km/h).<br>No se considera vehículo a motor, pero requiere Seguro.<br><b>Sanción SOA:</b> 300€ (Circular) / 200€ (Titular).<br><br>🔍 <b>TIP POLICIAL (Instrucción SANC 2026/13):</b><br>• Etiqueta Identificativa: Formato <b>M</b> + 4 números + 3 letras.<br>• Certificados Homologados: Empiezan por <b>B</b>.<br>• Transitorios (Pre-2024): Empiezan por <b>Z</b>.",
+            text: "⚠️ <b>VMP ASIMILADO A MOTOR</b><br>Peso entre 25 y 50kg Y Velocidad > 14km/h.<br>A efectos de Seguro se trata como Vehículo a Motor.<br><b>Sanción SOA:</b> 800€ (Circular) / 610€ (Titular).<br><br>ℹ️ <b>NOTA PENAL (Dictamen 2/2021):</b> No aplica Art. 384 CP ni 379 CP.<br>🏗️ <b>GRÚA:</b> No procede retirada automática. Solo si el infractor se niega a retirar el vehículo por sus medios (Art 105 LSV).<br><br>🔍 <b>TIP POLICIAL (Instrucción SANC 2026/13):</b><br>• Etiqueta Identificativa: Formato <b>M</b> + 4 números + 3 letras.<br>• Certificados Homologados: Empiezan por <b>B</b>.<br>• Transitorios (Pre-2024): Empiezan por <b>Z</b>.",
             infractions: {
                 admin: { 
                     default: { 
@@ -170,8 +170,7 @@ const app = {
             text: "🚫 <b>VEHÍCULO CAMUFLADO / FUERA DE NORMA</b><br>Vehículo comercializado como VMP pero que supera los umbrales legales (Ej. más de 50 kg de masa, sin cumplir normas EU 168/2013).", 
             infractions: { 
                 admin: { 
-                    default: { norm: "Art. 1.1 RGV", opt: "1.1.5B", amount: "500 €", reduced: "250 €", text: "Circular con un vehículo careciendo de la autorización administrativa (Permiso de Circulación) correspondiente. (Aplicable al no reunir requisitos VMP ni poder homologarse).", action: "INMOVILIZACIÓN DEFINITIVA" },
-                    alt: { norm: "Art. 22 bis RGV", opt: "VEH.22.B-2.5D", amount: "500 €", reduced: "250 €", text: "No cumplir el vehículo de movilidad personal los requisitos técnicos regulados en el Anexo XXI y que afectan gravemente a la seguridad vial.", action: "DEPÓSITO" }
+                    default: { norm: "Art. 1.1 RGV", opt: "VEH.1.1.5B", amount: "500 €", reduced: "250 €", text: "Circular con un vehículo careciendo de la autorización administrativa (Permiso de Circulación) correspondiente. (Aplicable al no reunir requisitos VMP ni poder homologarse).", action: "INMOVILIZACIÓN DEFINITIVA" }
                 }, 
                 soa: null 
             }
