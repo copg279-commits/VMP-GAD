@@ -54,8 +54,8 @@ const app = {
             text: "⚠️ <b>CICLO DE MOTOR (L1e-A)</b><br>Requiere Matrícula, Seguro y Casco.<br><br>ℹ️ <b>CRITERIO FISCALÍA (Dictamen 2/2021):</b> Se excluye de la Vía Penal (Arts. 379/384 CP). Procede denuncia administrativa.", 
             infractions: {
                 admin: { 
-                    default: { norm: "Art. 1.1 RGV", opt: "VEH.1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa para circular.", action: "INMOVILIZACIÓN / DEPÓSITO" },
-                    alt: { norm: "Art. 1.2 RGV (Instr. 2026/13)", opt: "VEH.1.2.5A", amount: "500 €", reduced: "250 €", text: "Circular con vehículo susceptible de matriculación careciendo de la placa de matrícula.", action: "INMOVILIZACIÓN / DEPÓSITO" }
+                    default: { norm: "Art. 1.2 RGV (Instr. 2026/13)", opt: "VEH.1.2.5A", amount: "500 €", reduced: "250 €", text: "Circular con un vehículo susceptible de matriculación careciendo de la autorización administrativa (no matriculado).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                    alt: { norm: "Art. 10.2 LSV", opt: "10.2.5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula (Vehículo SÍ matriculado pero sin placa física).", action: "INMOVILIZACIÓN / DEPÓSITO" }
                 },
                 soa: { type: "moped", driver: { opt: "2.1.5A", amount: 1000, text: "Circular careciendo de seguro obligatorio." }, owner: { opt: "2.1.1A", amount: 650, text: "Incumplir obligación de seguro." } } 
             }
@@ -65,8 +65,8 @@ const app = {
             text: "⚠️ <b>CICLOMOTOR (L1e-B)</b><br>Vehículo que excede características VMP.<br><b>⚖️ VÍA PENAL (STS 944/2025):</b><br>Al superar 25km/h o potencia, es Vehículo a Motor. Procede Art. 384 CP si carece de licencia AM.", 
            infractions: {
                 admin: { 
-                    default: { norm: "Art. 1.1 RGV", opt: "VEH.1.1.5B", amount: "500 €", reduced: "250 €", text: "Carecer de autorización administrativa para circular.", action: "INMOVILIZACIÓN / DEPÓSITO" },
-                    alt: { norm: "Art. 1.2 RGV (Instr. 2026/13)", opt: "VEH.1.2.5A", amount: "500 €", reduced: "250 €", text: "Circular con vehículo susceptible de matriculación careciendo de la placa de matrícula.", action: "INMOVILIZACIÓN / DEPÓSITO" }
+                    default: { norm: "Art. 1.2 RGV (Instr. 2026/13)", opt: "VEH.1.2.5A", amount: "500 €", reduced: "250 €", text: "Circular con un vehículo susceptible de matriculación careciendo de la autorización administrativa (no matriculado).", action: "INMOVILIZACIÓN / DEPÓSITO" },
+                    alt: { norm: "Art. 10.2 LSV", opt: "10.2.5A", amount: "200 €", reduced: "100 €", text: "Carecer de placas de matrícula (Vehículo SÍ matriculado pero sin placa física).", action: "INMOVILIZACIÓN / DEPÓSITO" }
                 },
                 soa: { type: "moped", driver: { opt: "2.1.5A", amount: 1000, text: "Circular sin seguro obligatorio." }, owner: { opt: "2.1.1A", amount: 650, text: "Incumplir obligación de seguro." } } 
             }
